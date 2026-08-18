@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopfloor Routing</title>
+    <style>
+      :root {
+        --bg: #0b1220;
+        --panel: #101b2d;
+        --panel-soft: rgba(15, 23, 42, 0.9);
+        --line: #3dd9b3;
+        --line-soft: rgba(61, 217, 179, 0.35);
+        --warning: #ffb454;
+        --accent: #77b9ff;
+        --danger: #ff6b6b;
+        --text: #edf6ff;
+        --muted: #9eb5cb;
+        --station-1: #10b981;
+        --station-2: #f59e0b;
+        --station-3: #60a5fa;
+        --shadow: rgba(0, 0, 0, 0.35);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(180deg, #09111d 0%, #0b1321 100%);
+        color: var(--text);
+      }
+
+      .page {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 32px;
+      }
+
+      .dashboard {
+        width: min(1200px, 100%);
+        background: rgba(12, 20, 33, 0.8);
+        border: 1px solid rgba(147, 197, 253, 0.18);
+        border-radius: 24px;
+        padding: 28px 28px 20px;
+        box-shadow: 0 26px 60px rgba(0, 0, 0, 0.36);
+        backdrop-filter: blur(8px);
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 2.5vw, 2.8rem);
+        letter-spacing: 0.04em;
+      }
+
+      .status-pill {
+        background: rgba(16, 185, 129, 0.12);
+        color: #9ef0d0;
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(120px, 1fr));
+        gap: 16px;
+        margin-bottom: 28px;
+      }
+
+      .stat {
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        border-radius: 16px;
+        padding: 16px 18px;
+      }
+
+      .label {
+        display: block;
+        color: var(--muted);
+        font-size: 0.74rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 12px;
+      }
+
+      .value {
+        font-size: clamp(1.2rem, 2vw, 2rem);
+        font-weight: 700;
+      }
+
+      .shopfloor {
+        position: relative;
+        height: 450px;
+        border-radius: 22px;
+        background: linear-gradient(180deg, rgba(15, 22, 35, 0.95), rgba(12, 18, 30, 0.9));
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        overflow: hidden;
+      }
+
+      .grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+        background-size: 36px 36px;
+      }
+
+      .flow-line {
+        position: absolute;
+        left: 90px;
+        top: 220px;
+        width: 860px;
+        height: 8px;
+        background: linear-gradient(90deg, rgba(61, 217, 179, 0.18), rgba(61, 217, 179, 0.9), rgba(61, 217, 179, 0.18));
+        border-radius: 999px;
+        box-shadow: 0 0 22px rgba(61, 217, 179, 0.5);
+      }
+
+      .flow-line::before,
+      .flow-line::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+      }
+
+      .flow-line::before {
+        background: repeating-linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.15) 0 12px,
+          transparent 12px 24px
+        );
+        opacity: 0.5;
+      }
+
+      .station {
+        position: absolute;
+        top: 120px;
+        width: 210px;
+        min-height: 170px;
+        padding: 18px 18px 16px;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(16, 23, 35, 0.92);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 20px 28px rgba(0, 0, 0, 0.25);
+      }
+
+      .station::before {
+        content: "";
+        position: absolute;
+        top: -18px;
+        left: 18px;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: var(--icon-bg, rgba(255, 255, 255, 0.1));
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+      }
+
+      .station .icon {
+        position: absolute;
+        top: -12px;
+        left: 30px;
+        width: 18px;
+        height: 18px;
+        border-radius: 6px;
+        background: var(--accent-color, #fff);
+        box-shadow: 0 0 18px rgba(255, 255, 255, 0.28);
+      }
+
+      .station .tag {
+        display: inline-block;
+        margin-top: 20px;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .station h2 {
+        margin: 10px 0 8px;
+        font-size: 1.2rem;
+      }
+
+      .station p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.5;
+        font-size: 0.92rem;
+      }
+
+      .station-1 {
+        left: 60px;
+        --icon-bg: rgba(16, 185, 129, 0.18);
+        --accent-color: var(--station-1);
+      }
+
+      .station-2 {
+        left: 420px;
+        --icon-bg: rgba(245, 158, 11, 0.15);
+        --accent-color: var(--station-2);
+      }
+
+      .station-3 {
+        left: 780px;
+        --icon-bg: rgba(96, 165, 250, 0.15);
+        --accent-color: var(--station-3);
+      }
+
+      .route-arrow {
+        position: absolute;
+        width: 120px;
+        height: 8px;
+        background: linear-gradient(90deg, rgba(61, 217, 179, 0.2), rgba(61, 217, 179, 0.95));
+        border-radius: 999px;
+        top: 220px;
+      }
+
+      .route-arrow::after {
+        content: "";
+        position: absolute;
+        right: -10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-left: 18px solid rgba(61, 217, 179, 0.95);
+      }
+
+      .arrow-1 { left: 270px; }
+      .arrow-2 { left: 630px; }
+
+      .unit {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #cffafe, #2dd4bf);
+        border: 2px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 0 18px rgba(45, 212, 191, 0.9);
+        z-index: 10;
+      }
+
+      .unit::after {
+        content: "";
+        position: absolute;
+        inset: 5px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.7);
+      }
+
+      .unit-1 { --offset: 0.1; }
+      .unit-2 { --offset: 0.45; }
+      .unit-3 { --offset: 0.72; }
+
+      .legend {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-top: 18px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(148, 163, 184, 0.12);
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      .legend-items {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      .legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+
+      .dot.green { background: var(--station-1); }
+      .dot.orange { background: var(--station-2); }
+      .dot.blue { background: var(--station-3); }
+
+      @media (max-width: 980px) {
+        .stats {
+          grid-template-columns: repeat(2, minmax(120px, 1fr));
+        }
+
+        .shopfloor {
+          height: 650px;
+        }
+
+        .station-1 { left: 30px; }
+        .station-2 { left: 30px; top: 310px; }
+        .station-3 { left: 30px; top: 500px; }
+
+        .flow-line {
+          left: 230px;
+          top: 170px;
+          width: 8px;
+          height: 420px;
+        }
+
+        .route-arrow {
+          left: 225px;
+          width: 8px;
+          height: 120px;
+        }
+
+        .route-arrow::after {
+          top: auto;
+          bottom: -10px;
+          left: 50%;
+          transform: translateX(-50%);
+          border-left: 10px solid transparent;
+          border-right: 10px solid transparent;
+          border-top: 18px solid rgba(61, 217, 179, 0.95);
+        }
+
+        .arrow-1 { top: 250px; }
+        .arrow-2 { top: 460px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="dashboard">
+        <div class="topbar">
+          <h1>Shopfloor Routing</h1>
+          <div class="status-pill">Live Flow</div>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <span class="label">Units in Queue</span>
+            <span class="value">18</span>
+          </div>
+          <div class="stat">
+            <span class="label">Processed</span>
+            <span class="value">146</span>
+          </div>
+          <div class="stat">
+            <span class="label">Cycle Time</span>
+            <span class="value">11.2 min</span>
+          </div>
+          <div class="stat">
+            <span class="label">Yield</span>
+            <span class="value">98.7%</span>
+          </div>
+        </div>
+
+        <div class="shopfloor">
+          <div class="grid"></div>
+          <div class="flow-line"></div>
+          <div class="route-arrow arrow-1"></div>
+          <div class="route-arrow arrow-2"></div>
+
+          <div class="station station-1">
+            <div class="icon"></div>
+            <span class="tag">Stage 01</span>
+            <h2>Unit Creation</h2>
+            <p>Assembly, labeling, and initial routing assignment for each unit.</p>
+          </div>
+
+          <div class="station station-2">
+            <div class="icon"></div>
+            <span class="tag">Stage 02</span>
+            <h2>Manual Test</h2>
+            <p>Operator verification, calibration checks, and defect review.</p>
+          </div>
+
+          <div class="station station-3">
+            <div class="icon"></div>
+            <span class="tag">Stage 03</span>
+            <h2>Packing</h2>
+            <p>Final wrap, carton sealing, and dispatch ready for shipment.</p>
+          </div>
+
+          <div class="unit unit-1"></div>
+          <div class="unit unit-2"></div>
+          <div class="unit unit-3"></div>
+        </div>
+
+        <div class="legend">
+          <div class="legend-items">
+            <span class="legend-item"><span class="dot green"></span> Unit Creation</span>
+            <span class="legend-item"><span class="dot orange"></span> Manual Test</span>
+            <span class="legend-item"><span class="dot blue"></span> Packing</span>
+          </div>
+          <div>Flow direction: Unit creation → Manual test → Packing</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const unitEls = document.querySelectorAll('.unit');
+
+      function clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+      }
+
+      function getRoutePoints() {
+        const w = window.innerWidth;
+        const isMobile = w < 980;
+
+        if (isMobile) {
+          return [
+            { x: 226, y: 170 },
+            { x: 226, y: 335 },
+            { x: 226, y: 520 }
+          ];
+        }
+
+        return [
+          { x: 170, y: 225 },
+          { x: 390, y: 225 },
+          { x: 670, y: 225 },
+          { x: 910, y: 225 }
+        ];
+      }
+
+      const route = getRoutePoints();
+
+      function interpolateSegment(a, b, t) {
+        return {
+          x: a.x + (b.x - a.x) * t,
+          y: a.y + (b.y - a.y) * t
+        };
+      }
+
+      function moveUnit(unit, startOffset, speed) {
+        const length = route.length - 1;
+
+        function animate(time) {
+          const cycle = (time * 0.00008 * speed + startOffset) % 1;
+          const scaled = cycle * length;
+          const segmentIndex = Math.floor(scaled);
+          const segT = scaled - segmentIndex;
+          const start = route[segmentIndex];
+          const end = route[Math.min(segmentIndex + 1, route.length - 1)];
+          const pos = interpolateSegment(start, end, segT);
+
+          unit.style.left = `${pos.x}px`;
+          unit.style.top = `${pos.y}px`;
+          requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      unitEls.forEach((unit, index) => {
+        const base = index * 0.28;
+        moveUnit(unit, base, 1.25 + index * 0.28);
+      });
+
+      window.addEventListener('resize', () => {
+        const newRoute = getRoutePoints();
+        route.length = 0;
+        newRoute.forEach((point) => route.push(point));
+      });
+    </script>
+  </body>
+</html>
