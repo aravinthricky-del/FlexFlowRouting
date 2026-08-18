@@ -168,6 +168,29 @@
         flex: 1 1 auto;
       }
 
+      .status-header {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .status-card {
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(12, 20, 33, 0.9));
+        border: 1px solid rgba(61, 217, 179, 0.12);
+        border-radius: 18px;
+        padding: 14px 14px 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(61, 217, 179, 0.08);
+      }
+
+      .status-card h3 {
+        margin: 0 0 12px;
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
       .sidebar {
         width: 280px;
         display: flex;
@@ -765,6 +788,40 @@
           </div>
         </div>
 
+        <div class="status-header">
+          <div class="status-card">
+            <h3>Station Status</h3>
+            <div class="status-list">
+              <div class="status-row"><span class="left"><span class="status-light light-green"></span> Unit Creation</span><span>Ready</span></div>
+              <div class="status-row"><span class="left"><span class="status-light light-orange"></span> Manual Test</span><span>Active</span></div>
+              <div class="status-row"><span class="left"><span class="status-light light-red"></span> Repair</span><span>2 alerts</span></div>
+              <div class="status-row"><span class="left"><span class="status-light light-blue"></span> Packing</span><span>Queued</span></div>
+            </div>
+          </div>
+
+          <div class="status-card">
+            <h3>Production Order</h3>
+            <div class="order-metrics">
+              <div class="metric-box">
+                <span class="k">WIP</span>
+                <span class="v">42</span>
+              </div>
+              <div class="metric-box">
+                <span class="k">Packed</span>
+                <span class="v">148</span>
+              </div>
+              <div class="metric-box">
+                <span class="k">Order</span>
+                <span class="v">500</span>
+              </div>
+              <div class="metric-box">
+                <span class="k">Cartons</span>
+                <span class="v">30</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="layout">
           <div class="flow-panel">
             <div class="shopfloor">
@@ -817,40 +874,6 @@
               <div class="unit fail-unit" data-serial="S-4215" data-branch="fail" style="left: 170px; top: 228px"></div>
             </div>
           </div>
-
-          <aside class="sidebar">
-            <div class="side-card">
-              <h3>Station Status</h3>
-              <div class="status-list">
-                <div class="status-row"><span class="left"><span class="status-light light-green"></span> Unit Creation</span><span>Ready</span></div>
-                <div class="status-row"><span class="left"><span class="status-light light-orange"></span> Manual Test</span><span>Active</span></div>
-                <div class="status-row"><span class="left"><span class="status-light light-red"></span> Repair</span><span>2 alerts</span></div>
-                <div class="status-row"><span class="left"><span class="status-light light-blue"></span> Packing</span><span>Queued</span></div>
-              </div>
-            </div>
-
-            <div class="side-card">
-              <h3>Production Order</h3>
-              <div class="order-metrics">
-                <div class="metric-box">
-                  <span class="k">WIP</span>
-                  <span class="v">42</span>
-                </div>
-                <div class="metric-box">
-                  <span class="k">Packed</span>
-                  <span class="v">148</span>
-                </div>
-                <div class="metric-box">
-                  <span class="k">Order</span>
-                  <span class="v">500</span>
-                </div>
-                <div class="metric-box">
-                  <span class="k">Cartons</span>
-                  <span class="v">30</span>
-                </div>
-              </div>
-            </div>
-          </aside>
         </div>
 
         <div class="legend">
