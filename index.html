@@ -6,19 +6,19 @@
     <title>Shopfloor Routing</title>
     <style>
       :root {
-        --bg: #0b1220;
-        --panel: #101b2d;
+        --bg: #081421;
+        --panel: rgba(12, 20, 33, 0.9);
         --panel-soft: rgba(15, 23, 42, 0.9);
-        --line: #3dd9b3;
-        --line-soft: rgba(61, 217, 179, 0.35);
-        --warning: #ffb454;
-        --accent: #77b9ff;
-        --danger: #ff6b6b;
         --text: #edf6ff;
-        --muted: #9eb5cb;
-        --station-1: #10b981;
+        --muted: #9fc0d8;
+        --line: #3dd9b3;
+        --line-soft: rgba(61, 217, 179, 0.18);
+        --station-1: #14c38e;
         --station-2: #f59e0b;
-        --station-3: #60a5fa;
+        --station-3: #8b5cf6;
+        --station-4: #60a5fa;
+        --danger: #ef4444;
+        --success: #34d399;
         --shadow: rgba(0, 0, 0, 0.35);
       }
 
@@ -29,7 +29,7 @@
       body {
         margin: 0;
         font-family: Arial, Helvetica, sans-serif;
-        background: linear-gradient(180deg, #09111d 0%, #0b1321 100%);
+        background: linear-gradient(180deg, #081421 0%, #0d1727 100%);
         color: var(--text);
       }
 
@@ -38,77 +38,76 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 32px;
+        padding: 24px;
       }
 
       .dashboard {
-        width: min(1200px, 100%);
-        background: rgba(12, 20, 33, 0.8);
-        border: 1px solid rgba(147, 197, 253, 0.18);
+        width: min(1280px, 100%);
+        background: var(--panel);
+        border: 1px solid rgba(148, 163, 184, 0.14);
         border-radius: 24px;
-        padding: 28px 28px 20px;
-        box-shadow: 0 26px 60px rgba(0, 0, 0, 0.36);
-        backdrop-filter: blur(8px);
+        padding: 24px 24px 18px;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.42);
       }
 
       .topbar {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 16px;
+        margin-bottom: 18px;
       }
 
       h1 {
         margin: 0;
-        font-size: clamp(1.8rem, 2.5vw, 2.8rem);
+        font-size: clamp(1.9rem, 2.5vw, 2.8rem);
         letter-spacing: 0.04em;
       }
 
       .status-pill {
-        background: rgba(16, 185, 129, 0.12);
-        color: #9ef0d0;
-        border: 1px solid rgba(16, 185, 129, 0.35);
+        background: rgba(20, 195, 142, 0.12);
+        border: 1px solid rgba(20, 195, 142, 0.4);
+        color: #a9f0d3;
         padding: 8px 14px;
         border-radius: 999px;
-        font-size: 0.8rem;
-        letter-spacing: 0.08em;
         text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.76rem;
       }
 
       .stats {
         display: grid;
-        grid-template-columns: repeat(4, minmax(120px, 1fr));
+        grid-template-columns: repeat(4, minmax(130px, 1fr));
         gap: 16px;
-        margin-bottom: 28px;
+        margin-bottom: 24px;
       }
 
       .stat {
         background: rgba(15, 23, 42, 0.9);
-        border: 1px solid rgba(148, 163, 184, 0.16);
+        border: 1px solid rgba(148, 163, 184, 0.14);
         border-radius: 16px;
         padding: 16px 18px;
       }
 
-      .label {
+      .stat .label {
         display: block;
+        margin-bottom: 10px;
         color: var(--muted);
-        font-size: 0.74rem;
-        text-transform: uppercase;
+        font-size: 0.72rem;
         letter-spacing: 0.08em;
-        margin-bottom: 12px;
+        text-transform: uppercase;
       }
 
-      .value {
-        font-size: clamp(1.2rem, 2vw, 2rem);
+      .stat .value {
+        font-size: clamp(1.3rem, 2vw, 2.1rem);
         font-weight: 700;
       }
 
       .shopfloor {
         position: relative;
-        height: 450px;
-        border-radius: 22px;
-        background: linear-gradient(180deg, rgba(15, 22, 35, 0.95), rgba(12, 18, 30, 0.9));
+        height: 470px;
+        background: linear-gradient(180deg, rgba(15, 22, 35, 0.95), rgba(11, 17, 27, 0.92));
         border: 1px solid rgba(148, 163, 184, 0.12);
+        border-radius: 22px;
         overflow: hidden;
       }
 
@@ -118,119 +117,36 @@
         background-image:
           linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
           linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
-        background-size: 36px 36px;
+        background-size: 34px 34px;
       }
 
       .flow-line {
         position: absolute;
         left: 90px;
-        top: 220px;
-        width: 860px;
+        top: 228px;
+        width: 930px;
         height: 8px;
-        background: linear-gradient(90deg, rgba(61, 217, 179, 0.18), rgba(61, 217, 179, 0.9), rgba(61, 217, 179, 0.18));
+        background: linear-gradient(90deg, rgba(61, 217, 179, 0.16), rgba(61, 217, 179, 0.92), rgba(61, 217, 179, 0.18));
         border-radius: 999px;
-        box-shadow: 0 0 22px rgba(61, 217, 179, 0.5);
-      }
-
-      .flow-line::before,
-      .flow-line::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
+        box-shadow: 0 0 18px rgba(61, 217, 179, 0.45);
       }
 
       .flow-line::before {
-        background: repeating-linear-gradient(
-          90deg,
-          rgba(255, 255, 255, 0.15) 0 12px,
-          transparent 12px 24px
-        );
-        opacity: 0.5;
-      }
-
-      .station {
-        position: absolute;
-        top: 120px;
-        width: 210px;
-        min-height: 170px;
-        padding: 18px 18px 16px;
-        border-radius: 18px;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(16, 23, 35, 0.92);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 20px 28px rgba(0, 0, 0, 0.25);
-      }
-
-      .station::before {
         content: "";
         position: absolute;
-        top: -18px;
-        left: 18px;
-        width: 44px;
-        height: 44px;
-        border-radius: 12px;
-        background: var(--icon-bg, rgba(255, 255, 255, 0.1));
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-      }
-
-      .station .icon {
-        position: absolute;
-        top: -12px;
-        left: 30px;
-        width: 18px;
-        height: 18px;
-        border-radius: 6px;
-        background: var(--accent-color, #fff);
-        box-shadow: 0 0 18px rgba(255, 255, 255, 0.28);
-      }
-
-      .station .tag {
-        display: inline-block;
-        margin-top: 20px;
-        font-size: 0.7rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--muted);
-      }
-
-      .station h2 {
-        margin: 10px 0 8px;
-        font-size: 1.2rem;
-      }
-
-      .station p {
-        margin: 0;
-        color: var(--muted);
-        line-height: 1.5;
-        font-size: 0.92rem;
-      }
-
-      .station-1 {
-        left: 60px;
-        --icon-bg: rgba(16, 185, 129, 0.18);
-        --accent-color: var(--station-1);
-      }
-
-      .station-2 {
-        left: 420px;
-        --icon-bg: rgba(245, 158, 11, 0.15);
-        --accent-color: var(--station-2);
-      }
-
-      .station-3 {
-        left: 780px;
-        --icon-bg: rgba(96, 165, 250, 0.15);
-        --accent-color: var(--station-3);
+        inset: 0;
+        background: repeating-linear-gradient(90deg, rgba(255,255,255,.18) 0 12px, transparent 12px 24px);
+        border-radius: inherit;
+        opacity: 0.35;
       }
 
       .route-arrow {
         position: absolute;
         width: 120px;
         height: 8px;
+        top: 228px;
         background: linear-gradient(90deg, rgba(61, 217, 179, 0.2), rgba(61, 217, 179, 0.95));
         border-radius: 999px;
-        top: 220px;
       }
 
       .route-arrow::after {
@@ -246,31 +162,211 @@
         border-left: 18px solid rgba(61, 217, 179, 0.95);
       }
 
-      .arrow-1 { left: 270px; }
-      .arrow-2 { left: 630px; }
+      .arrow-1 { left: 292px; }
+      .arrow-2 { left: 552px; }
+      .arrow-3 { left: 812px; }
+
+      .branch-line {
+        position: absolute;
+        left: 530px;
+        top: 300px;
+        width: 220px;
+        height: 8px;
+        background: linear-gradient(90deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.9));
+        border-radius: 999px;
+        transform: rotate(18deg);
+        box-shadow: 0 0 14px rgba(245, 158, 11, 0.45);
+      }
+
+      .branch-line::after {
+        content: "";
+        position: absolute;
+        right: -10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-left: 18px solid rgba(245, 158, 11, 0.9);
+      }
+
+      .branch-label {
+        position: absolute;
+        left: 545px;
+        top: 280px;
+        background: rgba(245, 158, 11, 0.12);
+        border: 1px solid rgba(245, 158, 11, 0.4);
+        color: #ffcf8e;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        z-index: 5;
+      }
+
+      .station {
+        position: absolute;
+        top: 120px;
+        width: 200px;
+        min-height: 180px;
+        padding: 18px 16px 16px;
+        border-radius: 18px;
+        background: rgba(12, 27, 36, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 22px 28px rgba(0,0,0,0.18);
+      }
+
+      .station::before {
+        content: "";
+        position: absolute;
+        top: -18px;
+        left: 20px;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: var(--icon-bg, rgba(255,255,255,.1));
+        border: 1px solid rgba(255,255,255,0.14);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+      }
+
+      .station .icon {
+        position: absolute;
+        top: -13px;
+        left: 31px;
+        width: 18px;
+        height: 18px;
+        border-radius: 6px;
+        background: var(--accent-color, #fff);
+        box-shadow: 0 0 18px rgba(255,255,255,0.25);
+      }
+
+      .station .tag {
+        display: inline-block;
+        margin-top: 22px;
+        color: var(--muted);
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .station h2 {
+        margin: 10px 0 8px;
+        font-size: 1.15rem;
+      }
+
+      .station p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.45;
+        font-size: 0.88rem;
+      }
+
+      .station-1 {
+        left: 48px;
+        --icon-bg: rgba(20, 195, 142, 0.2);
+        --accent-color: var(--station-1);
+      }
+
+      .station-2 {
+        left: 318px;
+        --icon-bg: rgba(245, 158, 11, 0.18);
+        --accent-color: var(--station-2);
+      }
+
+      .station-3 {
+        left: 578px;
+        --icon-bg: rgba(139, 92, 246, 0.18);
+        --accent-color: var(--station-3);
+      }
+
+      .station-4 {
+        left: 838px;
+        --icon-bg: rgba(96, 165, 250, 0.18);
+        --accent-color: var(--station-4);
+      }
+
+      .packing-box {
+        position: absolute;
+        right: 18px;
+        bottom: 18px;
+        width: 170px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        background: rgba(96, 165, 250, 0.1);
+        border: 1px solid rgba(96, 165, 250, 0.18);
+        z-index: 2;
+      }
+
+      .packing-box .mini-tag {
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.68rem;
+      }
+
+      .packing-box .big {
+        display: block;
+        margin-top: 8px;
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+
+      .packing-box .small {
+        display: block;
+        margin-top: 2px;
+        color: #cfe6ff;
+        font-size: 0.82rem;
+      }
 
       .unit {
         position: absolute;
-        width: 18px;
-        height: 18px;
+        width: 24px;
+        height: 24px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #cffafe, #2dd4bf);
-        border: 2px solid rgba(255, 255, 255, 0.9);
+        background: linear-gradient(135deg, #d0f5ff, #2dd4bf);
+        border: 2px solid rgba(255,255,255,0.9);
+        box-shadow: 0 0 18px rgba(45, 212, 191, 0.85);
+        z-index: 15;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: translate(-50%, -50%);
+      }
+
+      .pass-unit {
+        background: linear-gradient(135deg, #d6ffe8, #2dd4bf);
         box-shadow: 0 0 18px rgba(45, 212, 191, 0.9);
-        z-index: 10;
+      }
+
+      .fail-unit {
+        background: linear-gradient(135deg, #ffd9b8, #f97316);
+        box-shadow: 0 0 18px rgba(249, 115, 22, 0.9);
+      }
+
+      .unit .serial {
+        position: absolute;
+        top: -26px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(10, 15, 22, 0.85);
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        border-radius: 999px;
+        padding: 3px 7px;
+        font-size: 0.55rem;
+        letter-spacing: 0.06em;
+        white-space: nowrap;
+        color: #dff7ff;
       }
 
       .unit::after {
         content: "";
         position: absolute;
-        inset: 5px;
+        inset: 6px;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.7);
+        background: rgba(255,255,255,0.6);
       }
-
-      .unit-1 { --offset: 0.1; }
-      .unit-2 { --offset: 0.45; }
-      .unit-3 { --offset: 0.72; }
 
       .legend {
         display: flex;
@@ -281,14 +377,14 @@
         padding-top: 12px;
         border-top: 1px solid rgba(148, 163, 184, 0.12);
         color: var(--muted);
-        font-size: 0.85rem;
+        font-size: 0.84rem;
       }
 
       .legend-items {
         display: flex;
-        align-items: center;
         gap: 18px;
         flex-wrap: wrap;
+        align-items: center;
       }
 
       .legend-item {
@@ -306,7 +402,8 @@
 
       .dot.green { background: var(--station-1); }
       .dot.orange { background: var(--station-2); }
-      .dot.blue { background: var(--station-3); }
+      .dot.purple { background: var(--station-3); }
+      .dot.blue { background: var(--station-4); }
 
       @media (max-width: 980px) {
         .stats {
@@ -314,22 +411,23 @@
         }
 
         .shopfloor {
-          height: 650px;
+          height: 690px;
         }
 
-        .station-1 { left: 30px; }
-        .station-2 { left: 30px; top: 310px; }
-        .station-3 { left: 30px; top: 500px; }
+        .station-1 { left: 26px; }
+        .station-2 { left: 26px; top: 300px; }
+        .station-3 { left: 26px; top: 485px; }
+        .station-4 { left: 26px; top: 670px; }
 
         .flow-line {
           left: 230px;
-          top: 170px;
+          top: 118px;
           width: 8px;
-          height: 420px;
+          height: 540px;
         }
 
         .route-arrow {
-          left: 225px;
+          left: 224px;
           width: 8px;
           height: 120px;
         }
@@ -344,8 +442,15 @@
           border-top: 18px solid rgba(61, 217, 179, 0.95);
         }
 
-        .arrow-1 { top: 250px; }
-        .arrow-2 { top: 460px; }
+        .arrow-1 { top: 252px; }
+        .arrow-2 { top: 452px; }
+        .arrow-3 { top: 642px; }
+
+        .packing-box {
+          left: 20px;
+          right: auto;
+          bottom: 16px;
+        }
       }
     </style>
   </head>
@@ -363,16 +468,16 @@
             <span class="value">18</span>
           </div>
           <div class="stat">
-            <span class="label">Processed</span>
-            <span class="value">146</span>
-          </div>
-          <div class="stat">
-            <span class="label">Cycle Time</span>
-            <span class="value">11.2 min</span>
-          </div>
-          <div class="stat">
             <span class="label">Yield</span>
-            <span class="value">98.7%</span>
+            <span class="value" id="yieldValue">96.4%</span>
+          </div>
+          <div class="stat">
+            <span class="label">Total Packed</span>
+            <span class="value" id="totalPacked">148</span>
+          </div>
+          <div class="stat">
+            <span class="label">Carton Fill</span>
+            <span class="value" id="cartonFill">3/5</span>
           </div>
         </div>
 
@@ -381,91 +486,151 @@
           <div class="flow-line"></div>
           <div class="route-arrow arrow-1"></div>
           <div class="route-arrow arrow-2"></div>
+          <div class="route-arrow arrow-3"></div>
+          <div class="branch-line"></div>
+          <div class="branch-label">Fail path</div>
 
           <div class="station station-1">
             <div class="icon"></div>
             <span class="tag">Stage 01</span>
             <h2>Unit Creation</h2>
-            <p>Assembly, labeling, and initial routing assignment for each unit.</p>
+            <p>Assembly, labeling, and initial routing assignment.</p>
           </div>
 
           <div class="station station-2">
             <div class="icon"></div>
             <span class="tag">Stage 02</span>
             <h2>Manual Test</h2>
-            <p>Operator verification, calibration checks, and defect review.</p>
+            <p>Operator verification, defect scan, and quality check.</p>
           </div>
 
           <div class="station station-3">
             <div class="icon"></div>
             <span class="tag">Stage 03</span>
-            <h2>Packing</h2>
-            <p>Final wrap, carton sealing, and dispatch ready for shipment.</p>
+            <h2>Repair</h2>
+            <p>Rework, calibration, and returned units routed for final QA.</p>
           </div>
 
-          <div class="unit unit-1"></div>
-          <div class="unit unit-2"></div>
-          <div class="unit unit-3"></div>
+          <div class="station station-4">
+            <div class="icon"></div>
+            <span class="tag">Stage 04</span>
+            <h2>Packing</h2>
+            <p>Final wrapper, carton fill, and dispatch preparation.</p>
+          </div>
+
+          <div class="packing-box">
+            <span class="mini-tag">Pack Status</span>
+            <span class="big" id="packingTotal">148</span>
+            <span class="small">Max 5 units/carton</span>
+          </div>
+
+          <div class="unit pass-unit" data-serial="S-1041" data-branch="pass" style="left: 170px; top: 228px"></div>
+          <div class="unit fail-unit" data-serial="S-2047" data-branch="fail" style="left: 170px; top: 228px"></div>
+          <div class="unit pass-unit" data-serial="S-3198" data-branch="pass" style="left: 170px; top: 228px"></div>
+          <div class="unit fail-unit" data-serial="S-4215" data-branch="fail" style="left: 170px; top: 228px"></div>
         </div>
 
         <div class="legend">
           <div class="legend-items">
             <span class="legend-item"><span class="dot green"></span> Unit Creation</span>
             <span class="legend-item"><span class="dot orange"></span> Manual Test</span>
+            <span class="legend-item"><span class="dot purple"></span> Repair</span>
             <span class="legend-item"><span class="dot blue"></span> Packing</span>
           </div>
-          <div>Flow direction: Unit creation → Manual test → Packing</div>
+          <div>Flow: Unit creation → Manual test → pass to packing or fail to repair → packing</div>
         </div>
       </div>
     </div>
 
     <script>
+      const state = {
+        totalCreated: 120,
+        passed: 116,
+        totalPacked: 148,
+        cartonCapacity: 5,
+        cartonFill: 3,
+      };
+
+      const yieldValue = document.getElementById('yieldValue');
+      const totalPackedEl = document.getElementById('totalPacked');
+      const cartonFillEl = document.getElementById('cartonFill');
+      const packingTotalEl = document.getElementById('packingTotal');
+
+      function updateMetrics() {
+        const yieldPct = (state.passed / state.totalCreated) * 100;
+        yieldValue.textContent = `${yieldPct.toFixed(1)}%`;
+        totalPackedEl.textContent = state.totalPacked;
+        packingTotalEl.textContent = state.totalPacked;
+        cartonFillEl.textContent = `${state.cartonFill}/${state.cartonCapacity}`;
+      }
+
       const unitEls = document.querySelectorAll('.unit');
-
-      function clamp(value, min, max) {
-        return Math.min(Math.max(value, min), max);
-      }
-
-      function getRoutePoints() {
-        const w = window.innerWidth;
-        const isMobile = w < 980;
-
-        if (isMobile) {
-          return [
-            { x: 226, y: 170 },
-            { x: 226, y: 335 },
-            { x: 226, y: 520 }
-          ];
+      const route = {
+        desktop: {
+          pass: [
+            { x: 170, y: 228 },
+            { x: 430, y: 228 },
+            { x: 900, y: 228 }
+          ],
+          fail: [
+            { x: 170, y: 228 },
+            { x: 430, y: 228 },
+            { x: 660, y: 330 },
+            { x: 900, y: 228 }
+          ]
+        },
+        mobile: {
+          pass: [
+            { x: 220, y: 175 },
+            { x: 220, y: 360 },
+            { x: 220, y: 720 }
+          ],
+          fail: [
+            { x: 220, y: 175 },
+            { x: 220, y: 360 },
+            { x: 330, y: 520 },
+            { x: 220, y: 720 }
+          ]
         }
+      };
 
-        return [
-          { x: 170, y: 225 },
-          { x: 390, y: 225 },
-          { x: 670, y: 225 },
-          { x: 910, y: 225 }
-        ];
+      function getRoutePoints(unit) {
+        const type = window.innerWidth < 980 ? 'mobile' : 'desktop';
+        return route[type][unit.dataset.branch || 'pass'];
       }
 
-      const route = getRoutePoints();
-
-      function interpolateSegment(a, b, t) {
+      function interpolate(a, b, t) {
         return {
           x: a.x + (b.x - a.x) * t,
           y: a.y + (b.y - a.y) * t
         };
       }
 
-      function moveUnit(unit, startOffset, speed) {
-        const length = route.length - 1;
+      function createSerialLabel(serial) {
+        const label = document.createElement('span');
+        label.className = 'serial';
+        label.textContent = serial;
+        return label;
+      }
+
+      unitEls.forEach((unit, index) => {
+        const serial = unit.dataset.serial;
+        if (!unit.querySelector('.serial')) {
+          unit.appendChild(createSerialLabel(serial));
+        }
+
+        const branch = unit.dataset.branch === 'fail' ? 'fail' : 'pass';
+        const points = getRoutePoints(unit);
 
         function animate(time) {
-          const cycle = (time * 0.00008 * speed + startOffset) % 1;
+          const length = points.length - 1;
+          const cycle = (time * 0.000065 * (1.1 + index * 0.18) + index * 0.18) % 1;
           const scaled = cycle * length;
           const segmentIndex = Math.floor(scaled);
-          const segT = scaled - segmentIndex;
-          const start = route[segmentIndex];
-          const end = route[Math.min(segmentIndex + 1, route.length - 1)];
-          const pos = interpolateSegment(start, end, segT);
+          const localT = scaled - segmentIndex;
+          const start = points[segmentIndex];
+          const end = points[Math.min(segmentIndex + 1, points.length - 1)];
+          const pos = interpolate(start, end, localT);
 
           unit.style.left = `${pos.x}px`;
           unit.style.top = `${pos.y}px`;
@@ -473,18 +638,10 @@
         }
 
         requestAnimationFrame(animate);
-      }
-
-      unitEls.forEach((unit, index) => {
-        const base = index * 0.28;
-        moveUnit(unit, base, 1.25 + index * 0.28);
       });
 
-      window.addEventListener('resize', () => {
-        const newRoute = getRoutePoints();
-        route.length = 0;
-        newRoute.forEach((point) => route.push(point));
-      });
+      updateMetrics();
+      window.addEventListener('resize', updateMetrics);
     </script>
   </body>
 </html>
