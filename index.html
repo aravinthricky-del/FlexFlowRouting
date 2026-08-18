@@ -33,21 +33,225 @@
         color: var(--text);
       }
 
+      .hmi-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 56px;
+        background: linear-gradient(180deg, rgba(8, 17, 28, 0.98), rgba(12, 20, 33, 0.95));
+        border-bottom: 1px solid rgba(61, 217, 179, 0.2);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+        z-index: 1000;
+      }
+
+      .hmi-header-left {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .hmi-facility {
+        font-size: 0.9rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .hmi-facility .name {
+        display: block;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--line);
+        letter-spacing: 0.04em;
+      }
+
+      .hmi-timestamp {
+        font-family: 'Courier New', monospace;
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #e8f5ff;
+        letter-spacing: 0.02em;
+      }
+
+      .hmi-status-bar {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .hmi-status-indicator {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.84rem;
+      }
+
+      .hmi-status-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #22c55e;
+        box-shadow: 0 0 12px #22c55e;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+      }
+
+      .alarm-banner {
+        position: fixed;
+        top: 56px;
+        left: 0;
+        right: 0;
+        background: linear-gradient(90deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.08));
+        border-bottom: 2px solid rgba(239, 68, 68, 0.4);
+        padding: 12px 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.9rem;
+        color: #fca5a5;
+        letter-spacing: 0.04em;
+        z-index: 999;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+      }
+
+      .alarm-banner.active {
+        max-height: 50px;
+        padding: 12px 24px;
+      }
+
+      .alarm-icon {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #ef4444;
+        box-shadow: 0 0 10px #ef4444;
+        flex-shrink: 0;
+      }
+
       .page {
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 24px;
+        padding-top: 140px;
       }
 
       .dashboard {
         width: min(1280px, 100%);
-        background: var(--panel);
-        border: 1px solid rgba(148, 163, 184, 0.14);
+        background: linear-gradient(135deg, var(--panel) 0%, rgba(15, 25, 38, 0.85) 100%);
+        border: 1px solid rgba(61, 217, 179, 0.15);
         border-radius: 24px;
         padding: 24px 24px 18px;
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.42);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(61, 217, 179, 0.12);
+      }
+
+      .layout {
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .flow-panel {
+        flex: 1 1 auto;
+      }
+
+      .sidebar {
+        width: 280px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding-top: 4px;
+      }
+
+      .side-card {
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(12, 20, 33, 0.9));
+        border: 1px solid rgba(61, 217, 179, 0.12);
+        border-radius: 18px;
+        padding: 14px 14px 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(61, 217, 179, 0.08);
+      }
+
+      .side-card h3 {
+        margin: 0 0 12px;
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .status-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .status-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 0.83rem;
+        color: var(--text);
+      }
+
+      .status-row .left {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .status-light {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 0 10px currentColor;
+      }
+
+      .light-green { background: #22c55e; color: #22c55e; }
+      .light-orange { background: #f59e0b; color: #f59e0b; }
+      .light-red { background: #ef4444; color: #ef4444; }
+      .light-blue { background: #60a5fa; color: #60a5fa; }
+
+      .order-metrics {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .metric-box {
+        background: linear-gradient(135deg, rgba(8, 17, 28, 0.85), rgba(6, 12, 20, 0.8));
+        border: 1px solid rgba(61, 217, 179, 0.1);
+        border-radius: 12px;
+        padding: 10px 10px 8px;
+        box-shadow: inset 0 1px 0 rgba(61, 217, 179, 0.06);
+      }
+
+      .metric-box .k {
+        display: block;
+        font-size: 0.64rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+
+      .metric-box .v {
+        display: block;
+        font-size: 1.2rem;
+        font-weight: 700;
       }
 
       .topbar {
@@ -55,6 +259,8 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 18px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid rgba(61, 217, 179, 0.1);
       }
 
       h1 {
@@ -72,20 +278,22 @@
         text-transform: uppercase;
         letter-spacing: 0.08em;
         font-size: 0.76rem;
+        box-shadow: 0 0 12px rgba(20, 195, 142, 0.2);
       }
 
       .stats {
         display: grid;
-        grid-template-columns: repeat(4, minmax(130px, 1fr));
+        grid-template-columns: repeat(5, minmax(120px, 1fr));
         gap: 16px;
         margin-bottom: 24px;
       }
 
       .stat {
-        background: rgba(15, 23, 42, 0.9);
-        border: 1px solid rgba(148, 163, 184, 0.14);
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(12, 20, 33, 0.9));
+        border: 1px solid rgba(61, 217, 179, 0.12);
         border-radius: 16px;
         padding: 16px 18px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(61, 217, 179, 0.08);
       }
 
       .stat .label {
@@ -105,10 +313,11 @@
       .shopfloor {
         position: relative;
         height: 470px;
-        background: linear-gradient(180deg, rgba(15, 22, 35, 0.95), rgba(11, 17, 27, 0.92));
-        border: 1px solid rgba(148, 163, 184, 0.12);
+        background: linear-gradient(180deg, rgba(15, 22, 35, 0.98), rgba(11, 17, 27, 0.95));
+        border: 1px solid rgba(61, 217, 179, 0.1);
         border-radius: 22px;
         overflow: hidden;
+        box-shadow: inset 0 1px 0 rgba(61, 217, 179, 0.1), 0 16px 36px rgba(0, 0, 0, 0.25);
       }
 
       .grid {
@@ -168,17 +377,41 @@
 
       .branch-line {
         position: absolute;
-        left: 530px;
-        top: 300px;
-        width: 220px;
-        height: 8px;
-        background: linear-gradient(90deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.9));
+        left: 435px;
+        top: 285px;
+        width: 8px;
+        height: 150px;
+        background: linear-gradient(180deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.9));
         border-radius: 999px;
-        transform: rotate(18deg);
         box-shadow: 0 0 14px rgba(245, 158, 11, 0.45);
       }
 
       .branch-line::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: -10px;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 18px solid rgba(245, 158, 11, 0.9);
+      }
+
+      .repair-return {
+        position: absolute;
+        left: 705px;
+        top: 365px;
+        width: 180px;
+        height: 8px;
+        background: linear-gradient(90deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.9));
+        border-radius: 999px;
+        transform: rotate(-18deg);
+        box-shadow: 0 0 14px rgba(245, 158, 11, 0.45);
+      }
+
+      .repair-return::after {
         content: "";
         position: absolute;
         right: -10px;
@@ -193,8 +426,8 @@
 
       .branch-label {
         position: absolute;
-        left: 545px;
-        top: 280px;
+        left: 455px;
+        top: 250px;
         background: rgba(245, 158, 11, 0.12);
         border: 1px solid rgba(245, 158, 11, 0.4);
         color: #ffcf8e;
@@ -276,13 +509,15 @@
       }
 
       .station-3 {
-        left: 578px;
+        left: 560px;
+        top: 285px;
         --icon-bg: rgba(139, 92, 246, 0.18);
         --accent-color: var(--station-3);
       }
 
       .station-4 {
         left: 838px;
+        top: 120px;
         --icon-bg: rgba(96, 165, 250, 0.18);
         --accent-color: var(--station-4);
       }
@@ -442,6 +677,25 @@
           border-top: 18px solid rgba(61, 217, 179, 0.95);
         }
 
+        .branch-line {
+          left: 220px;
+          top: 420px;
+          width: 8px;
+          height: 150px;
+        }
+
+        .repair-return {
+          left: 250px;
+          top: 560px;
+          width: 120px;
+          transform: rotate(-70deg);
+        }
+
+        .branch-label {
+          left: 160px;
+          top: 390px;
+        }
+
         .arrow-1 { top: 252px; }
         .arrow-2 { top: 452px; }
         .arrow-3 { top: 642px; }
@@ -455,6 +709,29 @@
     </style>
   </head>
   <body>
+    <div class="hmi-header">
+      <div class="hmi-header-left">
+        <div>
+          <div class="hmi-facility">
+            <span class="name">FlexFlow Shopfloor</span>
+            <span>Production Line A</span>
+          </div>
+        </div>
+        <div class="hmi-timestamp" id="systemTime">14:23:45</div>
+      </div>
+      <div class="hmi-status-bar">
+        <div class="hmi-status-indicator">
+          <span class="hmi-status-dot"></span>
+          System Online
+        </div>
+      </div>
+    </div>
+
+    <div class="alarm-banner" id="alarmBanner">
+      <span class="alarm-icon"></span>
+      <span id="alarmText">Repair Station: 2 units pending rework</span>
+    </div>
+
     <div class="page">
       <div class="dashboard">
         <div class="topbar">
@@ -468,66 +745,109 @@
             <span class="value">18</span>
           </div>
           <div class="stat">
-            <span class="label">Yield</span>
-            <span class="value" id="yieldValue">96.4%</span>
+            <span class="label">WIP</span>
+            <span class="value">42</span>
           </div>
           <div class="stat">
-            <span class="label">Total Packed</span>
+            <span class="label">Production Order</span>
+            <span class="value">500</span>
+          </div>
+          <div class="stat">
+            <span class="label">Packed</span>
             <span class="value" id="totalPacked">148</span>
           </div>
           <div class="stat">
-            <span class="label">Carton Fill</span>
-            <span class="value" id="cartonFill">3/5</span>
+            <span class="label">Yield</span>
+            <span class="value" id="yieldValue">96.4%</span>
           </div>
         </div>
 
-        <div class="shopfloor">
-          <div class="grid"></div>
-          <div class="flow-line"></div>
-          <div class="route-arrow arrow-1"></div>
-          <div class="route-arrow arrow-2"></div>
-          <div class="route-arrow arrow-3"></div>
-          <div class="branch-line"></div>
-          <div class="branch-label">Fail path</div>
+        <div class="layout">
+          <div class="flow-panel">
+            <div class="shopfloor">
+              <div class="grid"></div>
+              <div class="flow-line"></div>
+              <div class="route-arrow arrow-1"></div>
+              <div class="route-arrow arrow-2"></div>
+              <div class="route-arrow arrow-3"></div>
+              <div class="branch-line"></div>
+              <div class="repair-return"></div>
+              <div class="branch-label">Fail path</div>
 
-          <div class="station station-1">
-            <div class="icon"></div>
-            <span class="tag">Stage 01</span>
-            <h2>Unit Creation</h2>
-            <p>Assembly, labeling, and initial routing assignment.</p>
+              <div class="station station-1">
+                <div class="icon"></div>
+                <span class="tag">Stage 01</span>
+                <h2>Unit Creation</h2>
+                <p>Assembly, labeling, and initial routing assignment.</p>
+              </div>
+
+              <div class="station station-2">
+                <div class="icon"></div>
+                <span class="tag">Stage 02</span>
+                <h2>Manual Test</h2>
+                <p>Operator verification, defect scan, and quality check.</p>
+              </div>
+
+              <div class="station station-3">
+                <div class="icon"></div>
+                <span class="tag">Stage 03</span>
+                <h2>Repair</h2>
+                <p>Rework, calibration, and returned units routed for final QA.</p>
+              </div>
+
+              <div class="station station-4">
+                <div class="icon"></div>
+                <span class="tag">Stage 04</span>
+                <h2>Packing</h2>
+                <p>Final wrapper, carton fill, and dispatch preparation.</p>
+              </div>
+
+              <div class="packing-box">
+                <span class="mini-tag">Pack Status</span>
+                <span class="big" id="packingTotal">148</span>
+                <span class="small">Max 5 units/carton</span>
+              </div>
+
+              <div class="unit pass-unit" data-serial="S-1041" data-branch="pass" style="left: 170px; top: 228px"></div>
+              <div class="unit fail-unit" data-serial="S-2047" data-branch="fail" style="left: 170px; top: 228px"></div>
+              <div class="unit pass-unit" data-serial="S-3198" data-branch="pass" style="left: 170px; top: 228px"></div>
+              <div class="unit fail-unit" data-serial="S-4215" data-branch="fail" style="left: 170px; top: 228px"></div>
+            </div>
           </div>
 
-          <div class="station station-2">
-            <div class="icon"></div>
-            <span class="tag">Stage 02</span>
-            <h2>Manual Test</h2>
-            <p>Operator verification, defect scan, and quality check.</p>
-          </div>
+          <aside class="sidebar">
+            <div class="side-card">
+              <h3>Station Status</h3>
+              <div class="status-list">
+                <div class="status-row"><span class="left"><span class="status-light light-green"></span> Unit Creation</span><span>Ready</span></div>
+                <div class="status-row"><span class="left"><span class="status-light light-orange"></span> Manual Test</span><span>Active</span></div>
+                <div class="status-row"><span class="left"><span class="status-light light-red"></span> Repair</span><span>2 alerts</span></div>
+                <div class="status-row"><span class="left"><span class="status-light light-blue"></span> Packing</span><span>Queued</span></div>
+              </div>
+            </div>
 
-          <div class="station station-3">
-            <div class="icon"></div>
-            <span class="tag">Stage 03</span>
-            <h2>Repair</h2>
-            <p>Rework, calibration, and returned units routed for final QA.</p>
-          </div>
-
-          <div class="station station-4">
-            <div class="icon"></div>
-            <span class="tag">Stage 04</span>
-            <h2>Packing</h2>
-            <p>Final wrapper, carton fill, and dispatch preparation.</p>
-          </div>
-
-          <div class="packing-box">
-            <span class="mini-tag">Pack Status</span>
-            <span class="big" id="packingTotal">148</span>
-            <span class="small">Max 5 units/carton</span>
-          </div>
-
-          <div class="unit pass-unit" data-serial="S-1041" data-branch="pass" style="left: 170px; top: 228px"></div>
-          <div class="unit fail-unit" data-serial="S-2047" data-branch="fail" style="left: 170px; top: 228px"></div>
-          <div class="unit pass-unit" data-serial="S-3198" data-branch="pass" style="left: 170px; top: 228px"></div>
-          <div class="unit fail-unit" data-serial="S-4215" data-branch="fail" style="left: 170px; top: 228px"></div>
+            <div class="side-card">
+              <h3>Production Order</h3>
+              <div class="order-metrics">
+                <div class="metric-box">
+                  <span class="k">WIP</span>
+                  <span class="v">42</span>
+                </div>
+                <div class="metric-box">
+                  <span class="k">Packed</span>
+                  <span class="v">148</span>
+                </div>
+                <div class="metric-box">
+                  <span class="k">Order</span>
+                  <span class="v">500</span>
+                </div>
+                <div class="metric-box">
+                  <span class="k">Cartons</span>
+                  <span class="v">30</span>
+                </div>
+              </div>
+            </div>
+          </aside>
         </div>
 
         <div class="legend">
@@ -543,6 +863,43 @@
     </div>
 
     <script>
+      // System time update
+      const systemTimeEl = document.getElementById('systemTime');
+      function updateSystemTime() {
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        const ss = String(now.getSeconds()).padStart(2, '0');
+        systemTimeEl.textContent = `${hh}:${mm}:${ss}`;
+      }
+      updateSystemTime();
+      setInterval(updateSystemTime, 1000);
+
+      // Alarm banner management
+      const alarmBanner = document.getElementById('alarmBanner');
+      const alarmText = document.getElementById('alarmText');
+      
+      const alarmQueue = [
+        'Repair Station: 2 units pending rework',
+        'High temperature alert at Station 02',
+        'Packing queue over capacity'
+      ];
+      let currentAlarmIndex = 0;
+      let alarmShowDuration = 6000;
+      let alarmHideDuration = 4000;
+
+      function showAlarm() {
+        alarmText.textContent = alarmQueue[currentAlarmIndex % alarmQueue.length];
+        alarmBanner.classList.add('active');
+        setTimeout(() => {
+          alarmBanner.classList.remove('active');
+          currentAlarmIndex++;
+          setTimeout(showAlarm, alarmHideDuration);
+        }, alarmShowDuration);
+      }
+      setTimeout(showAlarm, 2000);
+
+      // Production state
       const state = {
         totalCreated: 120,
         passed: 116,
